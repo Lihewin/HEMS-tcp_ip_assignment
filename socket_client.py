@@ -37,7 +37,7 @@ class sensor:
             data_info = {"type": "data",
                          "id": str(self.self_id),
                          "sn": self.self_sn,
-                         "power": str(random.randint(10, 2000) + random.randint(0, 99) / 100),
+                         "power": str((self.self_id + 1) * 10 + random.randint(0, 99) / 100),
                          "state": "on",
                          "time": str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))}
             data_info_str = json.dumps(data_info, separators=(',', ':'))
