@@ -1,8 +1,8 @@
 import json
-import multiprocessing
+import logging
 import random
 import time
-import logging
+import multiprocessing
 from socket import *
 
 sensor_nums = 30
@@ -16,7 +16,7 @@ class sensor:
     def __init__(self, self_id):
         self.self_sn = self.generate_random_str()
         self.self_id = self_id
-        with open("config.json", 'r') as config:
+        with open("SocketClient\\config.json", 'r') as config:
             self.config_data = json.loads(config.read())
             config.close()
         # Read json config
@@ -93,7 +93,7 @@ class sensor:
                 break
 
 
-if __name__ == "__main__":
+def run():
     logging.basicConfig(level=logging.WARNING)
     logging.warning("Starting client emulator.")
     logging.warning("Client numbers: " + str(sensor_nums))
