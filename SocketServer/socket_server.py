@@ -6,7 +6,6 @@ class MyServer(socketserver.BaseRequestHandler):
     def handle(self):
         while True:
             data_received = self.request.recv(1024).strip()
-
             self.request.sendall(b"{\"result\":\"ok\"}")
             time.sleep(0.1)
 

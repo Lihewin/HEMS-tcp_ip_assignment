@@ -1,8 +1,8 @@
 import json
 import logging
 import random
+import threading
 import time
-import multiprocessing
 from socket import *
 
 sensor_nums = 30
@@ -98,5 +98,5 @@ def run():
     logging.warning("Starting client emulator.")
     logging.warning("Client numbers: " + str(sensor_nums))
     for num in range(sensor_nums):
-        p = multiprocessing.Process(target=sensor, args=(num,))
-        p.start()
+        t = threading.Thread(target=sensor, args=(num,))
+        t.start()
