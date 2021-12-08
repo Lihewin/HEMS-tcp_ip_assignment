@@ -5,7 +5,11 @@ import threading
 import time
 from socket import *
 
-sensor_nums = 30
+sensor_nums = 1
+
+
+# 传感器会和服务器定期通讯
+# 传感器要求服务器回传接收到的result，并根据result判断下一步是否off关闭或ok开启
 
 
 class sensor:
