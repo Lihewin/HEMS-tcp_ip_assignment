@@ -6,8 +6,7 @@ from pywebio.session import *
 from werkzeug import run_simple
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
-from WebController import switch_and_details, connector_controller
-from WebController.pyecharts_related import pyecharts_backend, pyecharts_frontend
+from WebController import switch_and_details, connector_controller, pyecharts_related
 
 from flask import Flask
 
@@ -27,16 +26,41 @@ def main_controller():
     put_markdown('## 控制面板')
     t2.start()
 
-    t3 = threading.Thread(target=pyecharts_frontend.put_echarts_page_bar)
-    register_thread(t3)
     put_markdown('## 实时分析')
-    t3.start()
+
+    def create_pyecharts_backend_threads():
+        t_general_power = threading.Thread(target=pyecharts_related.general_power.general_power_frame)
+        register_thread(t_general_power)
+        t_general_power.start()
+
+        t_power_percents = threading.Thread(target=pyecharts_related.power_percents.power_percents_frame())
+        register_thread(t_power_percents)
+        t_power_percents.start()
+
+        t_power_per_sensor = threading.Thread(target=pyecharts_related.power_per_sensor.power_per_sensor_frame())
+        register_thread(t_power_per_sensor)
+        t_power_per_sensor.start()
+
+        t_power_percents = threading.Thread(target=pyecharts_related.power_percents.power_percents_frame())
+        register_thread(t_power_percents)
+        t_power_percents.start()
+
+    create_pyecharts_backend_threads()
 
 
 dm = DispatcherMiddleware(main_app, {
-    '/pyecharts_frontend_bar': pyecharts_frontend.pyecharts_frontend_bar,
-    '/pyecharts_backend_bar': pyecharts_backend.pyecharts_backend_bar
+    '/general_power': pyecharts_related.general_power.general_power,
+    '/general_power_backend': pyecharts_related.general_power_backend.general_power_backend,
+    '/power_percents': pyecharts_related.power_percents.power_percents,
+    '/power_percents_backend': pyecharts_related.power_percents_backend.power_percents_backend
 })
+
+
+def start_main():
+    main_app.add_url_rule('/', 'webio_view', webio_view(main_controller),
+                          methods=['GET', 'POST', 'OPTIONS'])
+    run_simple('localhost', 80, dm)
+
 
 if __name__ == "__main__":
     main_app.add_url_rule('/', 'webio_view', webio_view(main_controller),

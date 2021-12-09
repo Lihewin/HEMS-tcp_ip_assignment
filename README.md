@@ -15,9 +15,9 @@
 
 ### ！！！！！！WARNING！！！！！！！！
 
-* The code crashes easily.
+* The code crashes easily.I made no efforts on robustness.
 
-* Don't touch the code unless you've made it clear what you are going to do.
+* Don't touch the code unless you've made it clear what you gonna to do.
 
 ## module details
 

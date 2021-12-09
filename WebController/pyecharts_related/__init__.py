@@ -1,0 +1,6 @@
+import WebController.pyecharts_related.general_power
+import WebController.pyecharts_related.general_power_backend
+import WebController.pyecharts_related.power_percents
+import WebController.pyecharts_related.power_percents_backend
+import WebController.pyecharts_related.power_per_sensor
+import WebController.pyecharts_related.power_per_sensor_backend

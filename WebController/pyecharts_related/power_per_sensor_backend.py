@@ -7,8 +7,8 @@ from flask_cors import CORS
 from pyecharts import options as opts
 from pyecharts.charts import Line
 
-pyecharts_backend_bar = Flask(__name__, static_folder="templates")
-CORS(pyecharts_backend_bar)
+power_per_sensor_backend = Flask(__name__, static_folder="templates")
+CORS(power_per_sensor_backend)
 
 
 def line_base() -> Line:
@@ -30,7 +30,7 @@ def line_base() -> Line:
     return line
 
 
-@pyecharts_backend_bar.route("/lineChart")
+@power_per_sensor_backend.route("/lineChart")
 def get_line_chart():
     c = line_base()
     return c.dump_options_with_quotes()
@@ -39,7 +39,7 @@ def get_line_chart():
 idx = 9
 
 
-@pyecharts_backend_bar.route("/lineDynamicData")
+@power_per_sensor_backend.route("/lineDynamicData")
 def update_line_data():
     global idx
     idx = idx + 1
@@ -47,4 +47,4 @@ def update_line_data():
 
 
 if __name__ == "__main__":
-    pyecharts_backend_bar.run(port=5000, threaded=True)
+    power_per_sensor_backend.run(port=5000, threaded=True)
