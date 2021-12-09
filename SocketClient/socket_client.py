@@ -5,7 +5,9 @@ import threading
 import time
 from socket import *
 
-sensor_nums = 1
+import SocketServer
+
+sensor_nums = 10
 
 
 # 传感器会和服务器定期通讯
@@ -27,6 +29,7 @@ class sensor:
         self.sensor_data_gen()
 
     def generate_random_str(self):
+
         random_str = ''
         base_str = 'ABCDEFGHIGKLMNOPQRSTUVWXYZ0123456789'
         length = len(base_str) - 1
@@ -40,7 +43,7 @@ class sensor:
         data_info = {"type": "data",
                      "id": str(self.self_id),
                      "sn": self.self_sn,
-                     "time": str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))}
+                     "time": str(time.time())}
         if self.next_ret_type == "on":
             data_info["state"] = "on"
             data_info["power"] = str((self.self_id + 1) * 10 + random.randint(0, 99) / 100)

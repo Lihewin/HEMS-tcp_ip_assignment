@@ -6,19 +6,17 @@ import time
 from ServerMessageHandler.message_handler import message_handler
 
 print_mutex = threading.Lock()
+handler = message_handler()
 
 
 class MyServer(socketserver.BaseRequestHandler):
     def handle(self):
         # 创建一个消息处理类
-        handler = message_handler()
         while True:
             data_received = self.request.recv(1024).strip()
-            print(data_received)
             data2send = handler.data_handler(data_received)
-            print(data2send)
             self.request.send(data2send)
-            time.sleep(0.01)
+            time.sleep(0.5)
 
 
 def run():
