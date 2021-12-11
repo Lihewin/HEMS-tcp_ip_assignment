@@ -65,7 +65,7 @@ class message_handler:
             return self.off_bytes
 
     # 以下函数为网页控制端编写。
-    def change_next_loop(self, state: str, sensor_id: str):
+    def change_next_loop(self, state: str, sensor_id: int):
         next_loop_flag_mutex.acquire()
         self.next_loop_flag[sensor_id] = state
         next_loop_flag_mutex.release()

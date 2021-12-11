@@ -19,4 +19,4 @@ if __name__ == "__main__":
     SocketServer.socket_server.run()
 
     # 然后启动我们的分析程序，绘图程序和网页前端。
-    WebController.main_frame.start_main()
+    # WebController.main_frame.start_main()

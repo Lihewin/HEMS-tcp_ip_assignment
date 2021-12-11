@@ -12,14 +12,15 @@ class add_raw_data:
         self.conn = sqlite3.connect("HEMS.db", check_same_thread=False)
         self.cursor = self.conn.cursor()
         self.cursor.execute("CREATE TABLE IF NOT EXISTS raw_data"
-                            "(id TEXT, sn TEXT, type TEXT, state TEXT, power TEXT, time TEXT)")
+                            "(id INTEGER, sn TEXT, type TEXT, state TEXT, power DOUBLE, time INTEGER)")
 
     def add_raw_data(self, data):
         if "power" not in data.keys():
-            data["power"] = ""
+            data["power"] = 0
+
         adder_lock.acquire()
-        self.cursor.execute(f"INSERT INTO raw_data(id, sn, type, state, power, time) VALUES (\"{data['id']}\","
-                            f"\"{data['sn']}\",\"{data['type']}\",\"{data['state']}\",\"{data['power']}\","
-                            f"\"{data['time']}\")")
+        self.cursor.execute(f"INSERT INTO raw_data(id, sn, type, state, power, time) VALUES ({data['id']},"
+                            f"\"{data['sn']}\",\"{data['type']}\",\"{data['state']}\",{data['power']},"
+                            f"{data['time']})")
         adder_lock.release()
         self.conn.commit()

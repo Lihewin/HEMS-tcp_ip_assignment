@@ -4,3 +4,5 @@ import WebController.pyecharts_related.power_percents
 import WebController.pyecharts_related.power_percents_backend
 import WebController.pyecharts_related.power_per_sensor
 import WebController.pyecharts_related.power_per_sensor_backend
+import WebController.pyecharts_related.all_sensor_history
+import WebController.pyecharts_related.all_sensor_history_backend

@@ -41,12 +41,12 @@ class sensor:
     # Generate total info for sensor
     def generate_sensor_info(self):
         data_info = {"type": "data",
-                     "id": str(self.self_id),
+                     "id": self.self_id,
                      "sn": self.self_sn,
-                     "time": str(time.time())}
+                     "time": round(time.time())}
         if self.next_ret_type == "on":
             data_info["state"] = "on"
-            data_info["power"] = str((self.self_id + 1) * 10 + random.randint(0, 99) / 100)
+            data_info["power"] = (self.self_id + 1) * 10 + random.randint(0, 99) / 100
             data_info_str = json.dumps(data_info, separators=(',', ':'))
             return data_info_str
         elif self.next_ret_type == "off":
