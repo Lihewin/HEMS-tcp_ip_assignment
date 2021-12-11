@@ -8,6 +8,8 @@ from pyecharts import options as opts
 from pyecharts.charts import Line
 
 power_per_sensor_backend = Flask(__name__, static_folder="templates")
+
+# 解决浏览器报错禁止跨域访问的错误
 CORS(power_per_sensor_backend)
 
 

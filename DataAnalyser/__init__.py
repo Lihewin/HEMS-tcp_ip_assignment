@@ -1,2 +1,1 @@
 import DataAnalyser.analyser_backend
-import DataAnalyser.power_per_sensor

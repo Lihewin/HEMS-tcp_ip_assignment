@@ -3,7 +3,7 @@ import time
 
 import SocketClient.socket_client
 import SocketServer.socket_server
-import WebController.main_frame
+# import WebController.main_frame
 
 '''
 def change_state():

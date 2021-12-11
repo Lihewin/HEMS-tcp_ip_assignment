@@ -1,24 +1,31 @@
 # HEMS-tcp_ip_assignment
 
-### Household energy management system with visualization system
+**以Socket作为服务器与传感器通讯手段的家庭能源管理系统**
 
 > 用python写了一个小的socket服务端，不过瘾，又把客户端写掉了，再回头看一眼，明显写了坨屎。又想做一个监控大屏幕，写了会pyecharts，做了个不伦不类的东西，又想实现MQTT协议，看了一点又觉得应该实现TCP/IP协议栈，又看了一点又觉得该写一个内核。最后觉得该去工地偷点沙子自制cpu。
 >
 > 步子太大，就容易扯到蛋。
 
-## Features
+### 特性
 
-* Basic level network communication based on socket programming
-* A user-friendly Web controller
-* Data visualization
-* Switchable sensors
+* 以Socket作为服务器与传感器通讯手段
+* 多传感器支持
+* 友好的Web用户界面
+* 可以控制每一个传感器的开关面板
+* 清晰的实时动态数据分析大屏幕
 
-### ！！！！！！WARNING！！！！！！！！
+### 警告
 
-* The code crashes easily.I made no efforts on robustness.
+* 程序说崩就崩，我没有做任何与鲁棒性有关的考虑与设计。
+* 哪怕程序正常跑起来了也不能说明是神明在保佑。我是坚定的唯物主义者。
+* 别动代码，除非你知道自己在干什么。
 
-* Don't touch the code unless you've made it clear what you gonna to do.
+## 项目组成
 
-## module details
+这个项目由以下三个大模块组成：
 
-### socket_client.py
+1. 后端通信模块
+2. 数据处理中间件
+3. WEB服务器与相应前端
+
+

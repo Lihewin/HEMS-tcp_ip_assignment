@@ -22,5 +22,5 @@ class add_raw_data:
         self.cursor.execute(f"INSERT INTO raw_data(id, sn, type, state, power, time) VALUES ({data['id']},"
                             f"\"{data['sn']}\",\"{data['type']}\",\"{data['state']}\",{data['power']},"
                             f"{data['time']})")
-        adder_lock.release()
         self.conn.commit()
+        adder_lock.release()
