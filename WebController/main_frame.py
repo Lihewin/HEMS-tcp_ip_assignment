@@ -32,7 +32,7 @@ def main_controller():
 
     put_markdown('## 实时分析')
 
-    # 创建四个图表的四个视图
+    # 创建三个图表的三个视图
     def create_pyecharts_backend_threads():
         t_general_power = threading.Thread(target=pyecharts_related.general_power.general_power_frame)
         register_thread(t_general_power)
@@ -46,26 +46,21 @@ def main_controller():
         register_thread(t_power_per_sensor)
         t_power_per_sensor.start()
 
-        t_all_sensor_history = threading.Thread(target=pyecharts_related.all_sensor_history.all_sensor_history_frame())
-        register_thread(t_all_sensor_history)
-        t_all_sensor_history.start()
-
     create_pyecharts_backend_threads()
 
 
-# 启动四个页面的后端接口和前端页面
-dm = DispatcherMiddleware(main_app, {
+# 启动三个页面的后端接口和前端页面
+main_app.wsgi_app = DispatcherMiddleware(main_app.wsgi_app, {
     # 饼图和条形图不需要呈现历史数据，所以使用向前端页面全量更新数据。
     '/power_percents': pyecharts_related.power_percents.power_percents,
-    '/power_percents_backend': pyecharts_related.power_per_sensor_backend.power_per_sensor_backend,
-    '/power_per_sensor': pyecharts_related.power_per_sensor.power_per_sensor,
-    '/power_per_sensor_backend': pyecharts_related.power_percents_backend.power_percents_backend,
+    '/power_percents_backend': pyecharts_related.power_percents_backend.power_percents_backend,
 
-    # 折线图和3D折线图需要呈现历史数据，所以使用增量更新
+    '/power_per_sensor': pyecharts_related.power_per_sensor.power_per_sensor,
+    '/power_per_sensor_backend': pyecharts_related.power_per_sensor_backend.power_per_sensor_backend,
+
+    # 折线图需要呈现历史数据，所以使用增量更新
     '/general_power': pyecharts_related.general_power.general_power,
     '/general_power_backend': pyecharts_related.general_power_backend.general_power_backend,
-    '/all_sensor_history': pyecharts_related.all_sensor_history.all_sensor_history,
-    '/all_sensor_history_backend': pyecharts_related.all_sensor_history_backend.all_sensor_history_backend
 })
 
 
@@ -73,11 +68,11 @@ dm = DispatcherMiddleware(main_app, {
 def start_main():
     main_app.add_url_rule('/', 'webio_view', webio_view(main_controller),
                           methods=['GET', 'POST', 'OPTIONS'])
-    run_simple('localhost', 80, dm)
+    main_app.run(host="localhost", port=80, debug=True)
 
 
 # 测试用
 if __name__ == "__main__":
     main_app.add_url_rule('/', 'webio_view', webio_view(main_controller),
                           methods=['GET', 'POST', 'OPTIONS'])
-    run_simple('localhost', 80, dm)
+    main_app.run(host="localhost", port=80, debug=True)

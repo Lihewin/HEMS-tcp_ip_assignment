@@ -24,8 +24,7 @@ class analyser:
 
     # 返回一个元组集合，首位为power_per_sensor本身，次位为系统总功率
     def general_power(self):
-        if self.power_per_sensor_data is None:
-            self.power_per_sensor()
+        self.power_per_sensor()
         total = 0
         for each_data in self.power_per_sensor_data:
             total = total + each_data[1]

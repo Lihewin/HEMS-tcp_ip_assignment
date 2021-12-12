@@ -8,38 +8,23 @@
 <script src="https://assets.pyecharts.org/assets/echarts.min.js" type="text/javascript"></script>
 <script>
     var chart = echarts.init(document.getElementById('bar'), 'white', {renderer: 'canvas'});
-    var old_data = [];
     $(
         function () {
             fetchData(chart);
-            setInterval(getDynamicData, 2000);
+            setInterval(fetchData, 2000);
         }
     );
 
     function fetchData() {
         $.ajax({
             type: "GET",
-            url: "http://localhost/power_percents_backend/lineChart",
+            url: "http://localhost/power_percents_backend/pieChart",
             dataType: "json",
             success: function (result) {
                 chart.setOption(result);
-                old_data = chart.getOption().series[0].data;
             }
         });
     }
 
-    function getDynamicData() {
-        $.ajax({
-            type: "GET",
-            url: "http://localhost/power_percents_backend/lineDynamicData",
-            dataType: "json",
-            success: function (result) {
-                old_data.push([result.name, result.value]);
-                chart.setOption({
-                    series: [{data: old_data}]
-                });
-            }
-        });
-    }
 
 </script>

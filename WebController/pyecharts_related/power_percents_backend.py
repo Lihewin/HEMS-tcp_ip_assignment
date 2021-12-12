@@ -5,45 +5,34 @@ from flask import Flask
 from flask_cors import CORS
 
 from pyecharts import options as opts
-from pyecharts.charts import Line
+from pyecharts.charts import Line, Pie
+
+from DataAnalyser.analyser_backend import analyser
 
 power_percents_backend = Flask(__name__, static_folder="templates")
 CORS(power_percents_backend)
 
 
-def line_base() -> Line:
-    line = (
-        Line()
-            .add_xaxis(["{}".format(i) for i in range(10)])
-            .add_yaxis(
-            series_name="",
-            y_axis=[randrange(50, 80) for _ in range(10)],
-            is_smooth=True,
-            label_opts=opts.LabelOpts(is_show=False),
-        )
-            .set_global_opts(
-            title_opts=opts.TitleOpts(title="动态数据"),
-            xaxis_opts=opts.AxisOpts(type_="value"),
-            yaxis_opts=opts.AxisOpts(type_="value"),
-        )
+def pie_base() -> Line:
+    data_analyser = analyser()
+    data = data_analyser.power_per_sensor()
+    pie = (
+        Pie()
+            .add('传感器', data, radius=[80, 150],
+                 label_opts=opts.LabelOpts(formatter="传感器{b}:{d}%"))
+            .set_global_opts(title_opts=opts.TitleOpts(title="传感器功率占比",
+                                                       subtitle="以百分比计算",
+                                                       ),
+
+                             )
     )
-    return line
+    return pie
 
 
-@power_percents_backend.route("/lineChart")
-def get_line_chart():
-    c = line_base()
+@power_percents_backend.route("/pieChart")
+def get_pie_chart():
+    c = pie_base()
     return c.dump_options_with_quotes()
-
-
-idx = 9
-
-
-@power_percents_backend.route("/lineDynamicData")
-def update_line_data():
-    global idx
-    idx = idx + 1
-    return jsonify({"name": idx, "value": randrange(50, 80)})
 
 
 if __name__ == "__main__":
