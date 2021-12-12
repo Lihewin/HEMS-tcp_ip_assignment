@@ -3,7 +3,6 @@ import threading
 from pywebio.output import *
 from pywebio.platform.flask import webio_view
 from pywebio.session import *
-from werkzeug import run_simple
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 import DataAnalyser
@@ -50,6 +49,7 @@ def main_controller():
 
 
 # 启动三个页面的后端接口和前端页面
+# 如果使用中间件则需要部署wsgi
 main_app.wsgi_app = DispatcherMiddleware(main_app.wsgi_app, {
     # 饼图和条形图不需要呈现历史数据，所以使用向前端页面全量更新数据。
     '/power_percents': pyecharts_related.power_percents.power_percents,
@@ -65,6 +65,7 @@ main_app.wsgi_app = DispatcherMiddleware(main_app.wsgi_app, {
 
 
 # 不要为难后端人写前端了
+# flask测试用服务器，就随便跑跑没必要部署到生产环境里。
 def start_main():
     main_app.add_url_rule('/', 'webio_view', webio_view(main_controller),
                           methods=['GET', 'POST', 'OPTIONS'])
