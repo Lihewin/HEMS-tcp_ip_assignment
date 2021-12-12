@@ -5,7 +5,9 @@ from flask import Flask
 from flask_cors import CORS
 
 from pyecharts import options as opts
-from pyecharts.charts import Line
+from pyecharts.charts import Bar
+
+from DataAnalyser.analyser_backend import analyser
 
 power_per_sensor_backend = Flask(__name__, static_folder="templates")
 
@@ -13,39 +15,31 @@ power_per_sensor_backend = Flask(__name__, static_folder="templates")
 CORS(power_per_sensor_backend)
 
 
-def line_base() -> Line:
-    line = (
-        Line()
-            .add_xaxis(["{}".format(i) for i in range(10)])
-            .add_yaxis(
-            series_name="",
-            y_axis=[randrange(50, 80) for _ in range(10)],
-            is_smooth=True,
-            label_opts=opts.LabelOpts(is_show=False),
-        )
+def bar_base() -> Bar:
+    data_analyser = analyser()
+    data = data_analyser.power_per_sensor()
+    ids = []
+    powers = []
+    for i in data:
+        ids.append(i[0])
+        powers.append(i[1])
+    bar = (
+        Bar()
+            .add_xaxis(ids)
+            .add_yaxis(series_name="传感器", y_axis=powers)
             .set_global_opts(
-            title_opts=opts.TitleOpts(title="动态数据"),
-            xaxis_opts=opts.AxisOpts(type_="value"),
-            yaxis_opts=opts.AxisOpts(type_="value"),
+            title_opts=opts.TitleOpts(title="各传感器当前功率", subtitle="功率：瓦特"),
         )
     )
-    return line
+    return bar
 
 
-@power_per_sensor_backend.route("/lineChart")
-def get_line_chart():
-    c = line_base()
+@power_per_sensor_backend.route("/barChart")
+def get_bar_chart():
+    c = bar_base()
     return c.dump_options_with_quotes()
 
 
-idx = 9
-
-
-@power_per_sensor_backend.route("/lineDynamicData")
-def update_line_data():
-    global idx
-    idx = idx + 1
-    return jsonify({"name": idx, "value": randrange(50, 80)})
 
 
 if __name__ == "__main__":

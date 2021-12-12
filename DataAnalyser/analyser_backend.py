@@ -14,7 +14,7 @@ class analyser:
 
     # 返回一个元组集合，每个元组首位为id，次位为该id传感器的当前功率
     def power_per_sensor(self):
-        conn = sqlite3.connect("..\\HEMS.db", check_same_thread=False)
+        conn = sqlite3.connect(r"C:\Users\Beijiang\PycharmProjects\TCPIP_Project\HEMS.db", check_same_thread=False)
         cur = conn.cursor()
         cur.execute("select id,round(avg(power),3) from raw_data where time >= %d GROUP BY id" % round(time.time() - 1))
         self.pss_lock.acquire()

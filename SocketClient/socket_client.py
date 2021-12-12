@@ -46,7 +46,7 @@ class sensor:
                      "time": round(time.time())}
         if self.next_ret_type == "on":
             data_info["state"] = "on"
-            data_info["power"] = (self.self_id + 1) * 10 + random.randint(0, 99) / 100
+            data_info["power"] = (random.randint(0, 99)) * 10 + random.randint(0, 999) / 100
             data_info_str = json.dumps(data_info, separators=(',', ':'))
             return data_info_str
         elif self.next_ret_type == "off":

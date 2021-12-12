@@ -10,7 +10,7 @@ def board():
     while True:
         with use_scope('details', clear=True) as details:
             set_env(output_animation=False)
-            put_table(board_generator())
+            put_table()
             time.sleep(10)
 
 

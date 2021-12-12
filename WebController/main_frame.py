@@ -32,9 +32,9 @@ def main_controller():
 
     put_markdown('## 实时分析')
 
-    # 启动四个图表的增量更新后端
+    # 创建四个图表的四个视图
     def create_pyecharts_backend_threads():
-        t_general_power = threading.Thread(target=pyecharts_related.general_power.general_power_frame, args=())
+        t_general_power = threading.Thread(target=pyecharts_related.general_power.general_power_frame)
         register_thread(t_general_power)
         t_general_power.start()
 
@@ -53,15 +53,17 @@ def main_controller():
     create_pyecharts_backend_threads()
 
 
+# 启动四个页面的后端接口和前端页面
 dm = DispatcherMiddleware(main_app, {
-
-    # 启动四个页面的后端接口和前端页面
-    '/general_power': pyecharts_related.general_power.general_power,
-    '/general_power_backend': pyecharts_related.general_power_backend.general_power_backend,
+    # 饼图和条形图不需要呈现历史数据，所以使用向前端页面全量更新数据。
     '/power_percents': pyecharts_related.power_percents.power_percents,
     '/power_percents_backend': pyecharts_related.power_per_sensor_backend.power_per_sensor_backend,
     '/power_per_sensor': pyecharts_related.power_per_sensor.power_per_sensor,
     '/power_per_sensor_backend': pyecharts_related.power_percents_backend.power_percents_backend,
+
+    # 折线图和3D折线图需要呈现历史数据，所以使用增量更新
+    '/general_power': pyecharts_related.general_power.general_power,
+    '/general_power_backend': pyecharts_related.general_power_backend.general_power_backend,
     '/all_sensor_history': pyecharts_related.all_sensor_history.all_sensor_history,
     '/all_sensor_history_backend': pyecharts_related.all_sensor_history_backend.all_sensor_history_backend
 })
