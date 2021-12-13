@@ -14,7 +14,6 @@ next_loop_flag_mutex = threading.Lock()
 
 
 class message_handler:
-    next_loop_flag = {}
     off_bytes = b"{\"result\":\"off\"}"
     ok_bytes = b"{\"result\":\"ok\"}"
     adder = None
@@ -32,49 +31,16 @@ class message_handler:
             return self.off_bytes
 
         # 倘若新发现一个合法的传感器，应当维护状态表，设为传感器现有状态
-        if data["id"] not in self.next_loop_flag:
-            next_loop_flag_mutex.acquire()
-            self.next_loop_flag[data["id"]] = data["state"]
-            next_loop_flag_mutex.release()
+        if not self.adder.acquire_state_data(data['id']):
+            self.adder.add_state_data(data['id'], data['state'])
 
         # 当传感器忙时，应当向其回传off命令
         if data["state"] == "suspend":
+            self.adder.add_state_data(data['id'], "off")
             return self.off_bytes
 
-        # 当传感器关闭时，查看flag，决定下一个循环是否需要开启
-        elif data["state"] == 'off':
-
-            if self.next_loop_flag[data["id"]] == 'on':
-                self.adder.add_raw_data(data)
-                return self.ok_bytes
-
-            if self.next_loop_flag[data["id"]] == 'off':
-                self.adder.add_raw_data(data)
-                return self.off_bytes
-
-        # 当传感器开启时，查看flag，决定下个循环是否需要关闭
-        elif data["state"] == 'on':
-            if self.next_loop_flag[data["id"]] == 'on':
-                self.adder.add_raw_data(data)
-                return self.ok_bytes
-
-            if self.next_loop_flag[data["id"]] == 'off':
-                self.adder.add_raw_data(data)
-                return self.off_bytes
+        # 当传感器不忙时，查看flag，决定下一个循环是否需要开启
         else:
-            return self.off_bytes
-
-    # 以下函数为网页控制端编写。
-    def change_next_loop(self, state: str, sensor_id: int):
-        next_loop_flag_mutex.acquire()
-        self.next_loop_flag[sensor_id] = state
-        next_loop_flag_mutex.release()
-
-        return True
-
-    def read_next_loop(self, sensor_id):
-        if sensor_id in self.next_loop_flag.keys():
-            if self.next_loop_flag[sensor_id]:
-                return self.next_loop_flag[sensor_id]
-        else:
-            return "unknown"
+            if self.adder.acquire_state_data(data['id']) == "on":
+                self.adder.add_raw_data(data)
+            return self.ok_bytes

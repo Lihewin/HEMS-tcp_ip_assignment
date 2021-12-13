@@ -6,7 +6,7 @@ from pywebio.session import *
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 import DataAnalyser
-from WebController import switch_and_details, connector_controller, pyecharts_related
+from WebController import switch_and_details, sensor_controller, pyecharts_related
 
 from flask import Flask
 
@@ -24,7 +24,7 @@ def main_controller():
     t1.start()
 
     # 总控台
-    t2 = threading.Thread(target=connector_controller.board)
+    t2 = threading.Thread(target=sensor_controller.board)
     register_thread(t2)
     put_markdown('## 总控台')
     t2.start()
