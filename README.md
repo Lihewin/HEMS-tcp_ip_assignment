@@ -32,7 +32,6 @@
 根据课设要求，现在主要介绍后端通信模块。
 
 ## 后端通信模块
-
 ### SocketServer.py
 
 #### 模块作用
@@ -86,9 +85,9 @@ SocketServer.py为通信模块的传感器端，负责模拟发送传感器数�
 * sn：传感器序列号
 * power：传感器检测到的功率
 * state：传感器目前的状态
-    * on：表示传感器处于开启状态
-    * suspend：表示传感器正忙，处于挂起状态
-    * off：表示传感器处于关闭状态。当传感器处于关闭或挂起状态时，传感器将不发送当前功率。
+  * on：表示传感器处于开启状态
+  * suspend：表示传感器正忙，处于挂起状态
+  * off：表示传感器处于关闭状态。当传感器处于关闭或挂起状态时，传感器将不发送当前功率。
 * time：当前时间戳，为double类型
 
 ##### 接收
@@ -124,3 +123,11 @@ SocketServer.py为通信模块的传感器端，负责模拟发送传感器数�
 1. 将本仓库克隆到本地
 2. 安装本项目使用的所有依赖库
 3. 运行仓库根目录下的main.py
+
+## 项目截图
+
+![image-20211214113946638](https://cdn.jsdelivr.net/gh/Lihewin/image_host/img/image-20211214113946638.png)
+
+![image-20211214114008400](https://cdn.jsdelivr.net/gh/Lihewin/image_host/img/image-20211214114008400.png)
+
+![image-20211214114237191](https://cdn.jsdelivr.net/gh/Lihewin/image_host/img/image-20211214114237191.png)
