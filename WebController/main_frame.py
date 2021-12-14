@@ -69,11 +69,4 @@ main_app.wsgi_app = DispatcherMiddleware(main_app.wsgi_app, {
 def start_main():
     main_app.add_url_rule('/', 'webio_view', webio_view(main_controller),
                           methods=['GET', 'POST', 'OPTIONS'])
-    main_app.run(host="localhost", port=80, debug=True)
-
-
-# 测试用
-if __name__ == "__main__":
-    main_app.add_url_rule('/', 'webio_view', webio_view(main_controller),
-                          methods=['GET', 'POST', 'OPTIONS'])
-    main_app.run(host="localhost", port=80, debug=True)
+    main_app.run(host="localhost", port=80, debug=False)

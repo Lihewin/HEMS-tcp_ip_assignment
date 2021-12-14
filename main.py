@@ -1,16 +1,20 @@
-import threading
 import time
 
+from multiprocessing import Process
+import webbrowser
 import SocketClient.socket_client
 import SocketServer.socket_server
-# import WebController.main_frame
-
+import WebController
 
 if __name__ == "__main__":
     # 就不用老师提供的传感器程序了，那个东西没法生成多样化的数据。
-    # 首先启动我们的通信后端和传感器模拟器
-    SocketClient.socket_client.run()
-    SocketServer.socket_server.run()
 
-    # 然后启动我们的分析程序，绘图程序和网页前端。
-    # WebController.main_frame.start_main()
+    sc_p = Process(target=SocketClient.socket_client.run)
+    ss_p = Process(target=SocketServer.socket_server.run)
+    wc_p = Process(target=WebController.main_frame.start_main)
+    sc_p.start()
+    ss_p.start()
+    time.sleep(1)
+    wc_p.start()
+    time.sleep(0.5)
+    webbrowser.open("localhost")

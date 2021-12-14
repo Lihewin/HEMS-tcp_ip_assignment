@@ -9,7 +9,7 @@ class add_raw_data:
     cursor = None
 
     def __init__(self):
-        self.conn = sqlite3.connect("C:\\Users\\Beijiang\\PycharmProjects\\TCPIP_Project\\HEMS.db",
+        self.conn = sqlite3.connect("HEMS.db",
                                     check_same_thread=False)
         self.cursor = self.conn.cursor()
         # 创建数据表

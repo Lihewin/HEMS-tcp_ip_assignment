@@ -12,7 +12,7 @@ class analyser:
     lock = threading.Lock()
 
     def __init__(self):
-        self.conn = sqlite3.connect(r"C:\Users\Beijiang\PycharmProjects\TCPIP_Project\HEMS.db", check_same_thread=False)
+        self.conn = sqlite3.connect(r"HEMS.db", check_same_thread=False)
         self.cursor = self.conn.cursor()
 
     # 返回一个元组集合，每个元组首位为id，次位为该id传感器的当前功率
@@ -59,6 +59,12 @@ class analyser:
         else:
             return None
 
+    def set_state_to(self, state: str, sensor_id: int):
+        self.lock.acquire()
+        self.cursor.execute(f"UPDATE state_data SET state = \"{state}\" WHERE id == {sensor_id}")
+        self.conn.commit()
+        self.lock.release()
+
     def set_all_state_to(self, state: str):
         self.lock.acquire()
         self.cursor.execute(f"UPDATE state_data SET state = \"{state}\"")
@@ -68,7 +74,7 @@ class analyser:
     def get_all_sensor_id(self):
         self.lock.acquire()
         result = self.cursor.execute(f"SELECT id FROM state_data")
-        self.lock.locked()
+        self.lock.release()
         s_list = []
         for i in result:
             if i:
@@ -79,4 +85,4 @@ class analyser:
 # for testing
 if __name__ == "__main__":
     new_class = analyser()
-    print(new_class.get_all_sensor_id())
+    print(new_class)

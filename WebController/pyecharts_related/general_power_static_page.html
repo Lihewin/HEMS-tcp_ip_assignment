@@ -35,6 +35,9 @@
             dataType: "json",
             success: function (result) {
                 old_data.push([result.name, result.value]);
+                if (old_data.length > 9) {
+                    old_data.shift()
+                }
                 chart.setOption({
                     series: [{data: old_data}]
                 });
